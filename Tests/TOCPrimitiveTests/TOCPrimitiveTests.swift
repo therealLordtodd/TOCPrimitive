@@ -1,6 +1,7 @@
 import Testing
 import SwiftUI
 import ContentModelPrimitive
+import ReaderChromeThemePrimitive
 @testable import TOCPrimitive
 
 private struct StubTOCProvider: TOCProvider {
@@ -78,4 +79,5 @@ private struct StubTOCProvider: TOCProvider {
         selectedNodeID: "chapter-1",
         onNodeSelected: { _ in }
     )
+    .readerChromeTheme(.dark)
 }

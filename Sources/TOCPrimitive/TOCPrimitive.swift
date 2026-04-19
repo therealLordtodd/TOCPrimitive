@@ -61,14 +61,16 @@ public final class TOCController: ObservableObject {
 public struct TOCListView: View {
     public var nodes: [TOCNode]
     public var selectedNodeID: ContentIdentity?
-    public var theme: ReaderChromeTheme
+    public var theme: ReaderChromeTheme?
     public var emptyTitle: String
     public var onNodeSelected: (TOCNode) -> Void
+
+    @Environment(\.readerChromeTheme) private var environmentTheme
 
     public init(
         nodes: [TOCNode],
         selectedNodeID: ContentIdentity?,
-        theme: ReaderChromeTheme = .default,
+        theme: ReaderChromeTheme? = nil,
         emptyTitle: String = "No contents",
         onNodeSelected: @escaping (TOCNode) -> Void
     ) {
@@ -104,17 +106,17 @@ public struct TOCListView: View {
     }
 
     private var emptyState: some View {
-        VStack(spacing: theme.spacing.small) {
+        VStack(spacing: resolvedTheme.spacing.small) {
             Image(systemName: "list.bullet.rectangle")
-                .font(theme.typography.title3)
-                .foregroundStyle(theme.colors.secondaryText)
+                .font(resolvedTheme.typography.title3)
+                .foregroundStyle(resolvedTheme.colors.secondaryText)
 
             Text(emptyTitle)
-                .font(theme.typography.callout)
-                .foregroundStyle(theme.colors.secondaryText)
+                .font(resolvedTheme.typography.callout)
+                .foregroundStyle(resolvedTheme.colors.secondaryText)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .padding(theme.spacing.large)
+        .padding(resolvedTheme.spacing.large)
     }
 
     private func tocRow(for node: TOCNode) -> some View {
@@ -123,25 +125,25 @@ public struct TOCListView: View {
         return Button {
             onNodeSelected(node)
         } label: {
-            HStack(spacing: theme.spacing.small) {
+            HStack(spacing: resolvedTheme.spacing.small) {
                 Text(node.title)
-                    .font(isSelected ? theme.typography.captionEmphasis : theme.typography.callout)
+                    .font(isSelected ? resolvedTheme.typography.captionEmphasis : resolvedTheme.typography.callout)
                     .foregroundStyle(
                         isSelected
-                            ? theme.colors.infoTint
-                            : theme.colors.primaryText
+                            ? resolvedTheme.colors.infoTint
+                            : resolvedTheme.colors.primaryText
                     )
                     .multilineTextAlignment(.leading)
 
-                Spacer(minLength: theme.spacing.small)
+                Spacer(minLength: resolvedTheme.spacing.small)
 
                 if isSelected {
                     Image(systemName: "checkmark")
-                        .font(theme.typography.caption)
-                        .foregroundStyle(theme.colors.infoTint)
+                        .font(resolvedTheme.typography.caption)
+                        .foregroundStyle(resolvedTheme.colors.infoTint)
                 }
             }
-            .padding(.vertical, theme.spacing.xSmall)
+            .padding(.vertical, resolvedTheme.spacing.xSmall)
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
@@ -167,11 +169,12 @@ public struct TOCPopoverButton: View {
     public var systemImage: String
     public var nodes: [TOCNode]
     public var selectedNodeID: ContentIdentity?
-    public var theme: ReaderChromeTheme
+    public var theme: ReaderChromeTheme?
     public var emptyTitle: String
     public var onNodeSelected: (TOCNode) -> Void
 
     @State private var showingPopover = false
+    @Environment(\.readerChromeTheme) private var environmentTheme
 
     public init(
         label: String = "Contents",
@@ -179,7 +182,7 @@ public struct TOCPopoverButton: View {
         systemImage: String = "list.bullet",
         nodes: [TOCNode],
         selectedNodeID: ContentIdentity?,
-        theme: ReaderChromeTheme = .default,
+        theme: ReaderChromeTheme? = nil,
         emptyTitle: String = "No contents",
         onNodeSelected: @escaping (TOCNode) -> Void
     ) {
@@ -202,16 +205,16 @@ public struct TOCPopoverButton: View {
         .popover(isPresented: $showingPopover, arrowEdge: .bottom) {
             VStack(alignment: .leading, spacing: 0) {
                 Text(popoverTitle)
-                    .font(theme.typography.title3)
-                    .foregroundStyle(theme.colors.primaryText)
-                    .padding(theme.spacing.large)
+                    .font(resolvedTheme.typography.title3)
+                    .foregroundStyle(resolvedTheme.colors.primaryText)
+                    .padding(resolvedTheme.spacing.large)
 
                 Divider()
 
                 TOCListView(
                     nodes: nodes,
                     selectedNodeID: selectedNodeID,
-                    theme: theme,
+                    theme: resolvedTheme,
                     emptyTitle: emptyTitle,
                     onNodeSelected: { node in
                         onNodeSelected(node)
@@ -221,5 +224,15 @@ public struct TOCPopoverButton: View {
             }
             .frame(width: 320, height: 420)
         }
+    }
+
+    private var resolvedTheme: ReaderChromeTheme {
+        theme ?? environmentTheme
+    }
+}
+
+private extension TOCListView {
+    var resolvedTheme: ReaderChromeTheme {
+        theme ?? environmentTheme
     }
 }

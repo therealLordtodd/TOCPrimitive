@@ -37,6 +37,8 @@ targets: [
 
 Depends on `ContentModelPrimitive` (for `TOCProvider` and `TOCNode`) and `ReaderChromeThemePrimitive` (for theming).
 
+`TOCListView` and `TOCPopoverButton` resolve reader chrome theming from the surrounding `readerChromeTheme` environment by default. Pass `theme:` only if a specific TOC surface should override the host's shared reader chrome theme.
+
 ## Basic Usage
 
 Inside `ReaderView`: already wired via `ReaderComposer.currentTOCController`.
