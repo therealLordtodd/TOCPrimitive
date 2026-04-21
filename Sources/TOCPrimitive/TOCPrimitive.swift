@@ -222,7 +222,10 @@ public struct TOCPopoverButton: View {
                     }
                 )
             }
-            .frame(width: 320, height: 420)
+            .frame(
+                width: resolvedTheme.metrics.tocPopoverWidth,
+                height: resolvedTheme.metrics.tocPopoverHeight
+            )
         }
     }
 
