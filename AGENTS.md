@@ -27,8 +27,8 @@
 
 ## Primary Documentation
 
-- Host-facing usage + API reference: `/Users/todd/Programming/Packages/TOCPrimitive/README.md`
-- Portfolio integration guide: `/Users/todd/Programming/Packages/ReaderKit/docs/reader-stack-integration-guide.md`
+- Host-facing usage + API reference: `/Users/todd/Building - Apple/Packages/TOCPrimitive/README.md`
+- Portfolio integration guide: `/Users/todd/Building - Apple/Packages/ReaderKit/docs/reader-stack-integration-guide.md`
 
 ## GitHub Repository Visibility
 
