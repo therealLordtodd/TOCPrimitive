@@ -2,6 +2,17 @@
 
 > Claude Code loads this file automatically at the start of every session.
 
+## Repositories & Local Paths
+
+| Package | Repository | Local Path |
+|---------|------------|------------|
+| **TOCPrimitive** | https://github.com/therealLordtodd/TOCPrimitive.git | `/Users/todd/Building - Apple/Packages/TOCPrimitive` |
+
+## Build & Test
+
+- Build: `swift build`
+- Test: `swift test`
+
 ## Package Purpose
 
 `TOCPrimitive` owns the shared table-of-contents surface. `TOCController` loads TOC nodes from a `TOCProvider` conformance (defined in `ContentModelPrimitive`) and presents them with a consistent tree view. Renderer primitives (Markdown, PDF, EPUB, HTML) implement `TOCProvider`; this primitive renders whatever they return.
