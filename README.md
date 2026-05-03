@@ -52,6 +52,7 @@ import SwiftUI
 
 struct CustomReader: View {
     @StateObject private var controller: TOCController
+    @State private var selectedNodeID: ContentIdentity?
 
     init(provider: any TOCProvider) {
         _controller = StateObject(wrappedValue: TOCController(provider: provider))
@@ -59,7 +60,14 @@ struct CustomReader: View {
 
     var body: some View {
         HStack {
-            TOCTreeView(controller: controller)
+            TOCListView(
+                nodes: controller.nodes,
+                selectedNodeID: selectedNodeID,
+                onNodeSelected: { node in
+                    selectedNodeID = node.id
+                    navigate(to: node.anchor)
+                }
+            )
                 .task { await controller.load() }
 
             ReaderContent(/* ... */)

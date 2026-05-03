@@ -36,6 +36,12 @@
 - **Extraction lives in the renderer.** The primitive does not parse outlines; the renderer's `TOCProvider` does.
 - **No host-specific navigation logic.** The tree view surfaces nodes and their anchors; the host or composer handles navigation.
 
+## Security Posture
+
+`TOCPrimitive` is a Cat 2 reader-navigation surface over a host/renderer-provided `TOCProvider`. It owns no credentials, network calls, filesystem access, database access, durable persistence, pasteboard access, logging facade, outline parser, document renderer, or AISeams surface.
+
+The primitive invokes `TOCProvider.tableOfContents()`, stores the returned nodes in a per-document `TOCController`, renders TOC titles/anchors/children, and calls host selection closures. Renderers and hosts own PDF/EPUB/HTML/Markdown extraction, file access, sandbox/security-scoped bookmarks, parsing safety, document authorization, navigation side effects, persistence/sync of selected location, logging/audit, redaction, error-message hygiene, and any AI workflow that exposes or changes reader navigation.
+
 ## Primary Documentation
 
 - Host-facing usage + API reference: `/Users/todd/Building - Apple/Packages/TOCPrimitive/README.md`
@@ -45,6 +51,6 @@
 
 - This repository is **private**.
 
-## Performance posture
+## Performance Posture
 
-Runtime service primitive. Hot paths are the package's public entry points (per-call dispatch / lookup / state update). Concurrency model: deliberate (value type, `Sendable` class, or actor-fronted as the source documents). Allocations on the hot path are kept light. Reviewed 2026-04-29 (Speed & Clarity round 1, baseline pass); deeper review queued for round 2.
+Hot paths are `TOCController.load()`, provider result assignment, `@Published` state updates, SwiftUI `List` / `OutlineGroup` row rendering, selected-node scrolling, and host selection callback dispatch. Extraction and parsing performance belong to the renderer's `TOCProvider`; keep this package focused on presentation and state handoff. Reviewed 2026-05-02 (Security follow-up correction).
